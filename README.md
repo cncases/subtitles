@@ -2,6 +2,8 @@
 
 人人影视字幕数据搜索
 
+Demo: <https://subtitles.caseopen.org/>
+
 数据来源：https://github.com/qundao/mirror-yyets-subtitles
 
 ## 特征
