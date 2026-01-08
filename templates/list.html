@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'none'; img-src 'self'; script-src 'none'; style-src 'self'; object-src 'none'; font-src 'none'; form-action 'self'; frame-src 'none'; media-src 'none'; manifest-src 'none'; worker-src 'none';"
+        />
+        <title>人人影视字幕</title>
+        <link rel="stylesheet" href="/style.css" />
+    </head>
+    <body>
+        <header class="search-header">
+            <nav class="search-nav">
+                <form id="search" action="/" method="get">
+                    <div class="searchbar search-searchbar">
+                        <input
+                            class="search-input"
+                            type="text"
+                            id="search"
+                            name="search"
+                            value="{{ search }}"
+                        />
+                        <button type="submit" class="search-button">🔍</button>
+                    </div>
+                </form>
+            </nav>
+            <nav class="search-second-nav">
+                <div>
+                    <p>
+                        找到 {{ total }}
+                    </p>
+                </div>
+            </nav>
+        </header>
+
+        <main class="search-results">
+            {% for subtitle in subtitles %}
+            <article class="subtitle-card">
+                <div class="subtitle-header">
+                    <div class="subtitle-title">
+                        <h2 class="subtitle-cnname">{{ subtitle.cnname }}</h2>
+                        {% match subtitle.enname %}
+                        {% when Some with (name) %}
+                        <p class="subtitle-enname">{{ name }}</p>
+                        {% when None %}
+                        {% endmatch %}
+                        {% match subtitle.segment %}
+                        {% when Some with (seg) %}
+                        <p class="subtitle-segment">📺 {{ seg }}</p>
+                        {% when None %}
+                        {% endmatch %}
+                    </div>
+                    {% match subtitle.file %}
+                    {% when Some with (url) %}
+                    <a href="/static/{{ url }}" class="download-btn">
+                        <span>⬇</span>
+                        <span>下载</span>
+                    </a>
+                    {% when None %}
+                    {% endmatch %}
+                </div>
+                
+                <div class="subtitle-tags">
+                    {% if subtitle.lang.len() > 0 %}
+                    <span class="tag tag-lang">{{ subtitle.lang }}</span>
+                    {% endif %}
+                    {% if subtitle.format.len() > 0 %}
+                    <span class="tag tag-format">{{ subtitle.format }}</span>
+                    {% endif %}
+                    <span class="tag tag-source">
+                        {% if subtitle.source == "original" %}原创
+                        {% elif subtitle.source == "trans" %}转载
+                        {% elif subtitle.source == "official" %}官方
+                        {% else %}{{ subtitle.source }}
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <div class="subtitle-stats">
+                    <div class="stat">
+                        <span class="stat-icon">👁️</span>
+                        <span class="stat-value">{{ subtitle.views }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-icon">⬇</span>
+                        <span class="stat-value">{{ subtitle.downloads }}</span>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+            
+            {% if subtitles.len() == 0 %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🎬</div>
+                <p class="empty-state-text">没有找到字幕，试试其他关键词吧</p>
+            </div>
+            {% endif %}
+        </main>
+    </body>
+</html>
+

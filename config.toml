@@ -1,0 +1,3 @@
+subtitle_dir = "字幕备份" # 解压后的字幕文件夹路径
+address = "127.0.0.1:3000"
+db = "fjall.db"
